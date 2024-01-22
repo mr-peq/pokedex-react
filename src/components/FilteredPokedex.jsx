@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import PokedexTable from './PokedexTable'
 import TypeButton from './TypeButton';
+import '../SearchBar.css'
 
 export default function FilteredPokedex() {
   const [query, setQuery] = useState("grass");
