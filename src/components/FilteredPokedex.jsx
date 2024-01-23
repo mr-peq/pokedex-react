@@ -1,50 +1,24 @@
 import { useState, useEffect } from 'react'
 
 import PokedexTable from './PokedexTable'
-import TypeButton from './TypeButton';
-
-import '../SearchBar.css'
+import SearchBar from './SearchBar';
 
 export default function FilteredPokedex() {
-  const [query, setQuery] = useState("grass");
-  const [typeButtons, setTypeButtons] = useState([]);
-  const [queryTypes, setQueryTypes] = useState([]);
+  const [pokemons, setPokemons] = useState([]);
 
-
-  // const changeQuery = (e) => {
-  //   const string = e.currentTarget.value;
-  //   // setQuery(string);
-  //   const url = `http://localhost:3000/pokemons?types=${string}`;
-  //   fetch(url, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     }
-  //   })
-  //   .then(response => response.json())
-  //   .then((data) => {
-  //     console.log(data);
-  //   })
-  // }
-
-  const getTypes = () => {
-    const url = "http://localhost:3000/types";
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(response => response.json())
-    .then((types) => {
-      const buttons = types.map(type => TypeButton({'setQueryTypes': setQueryTypes, 'type': type.name}));
-      setTypeButtons(buttons);
-    });
+  const onTypeChange = (e) => {
+    const button = e.currentTarget;
+    button.classList.toggle('selected');
+    changePokemons();
   }
 
-  const getPokemons = () => {
-    // makes the query to get the filtered pokemons
-    const url = `http://localhost:3000/pokemons?types=${queryTypes.join('+')}`;
+  const changePokemons = () => {
+    const selectedTypes = document.querySelectorAll('.custom-btn.selected');
+    const query = [];
+    selectedTypes.forEach(button => {
+      query.push(button.innerText);
+    });
+    const url = `http://localhost:3000/pokemons?types=${query.join('+')}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -54,22 +28,19 @@ export default function FilteredPokedex() {
     .then(response => response.json())
     .then((data) => {
       console.log(data);
+      setPokemons(data);
     })
   }
 
   useEffect(() => {
-    getTypes();
+    changePokemons();
   }, []);
-
-  getPokemons();
 
 
   return(
     <>
-      <div className="types">
-        {typeButtons}
-      </div>
-      <PokedexTable query={query}/>
+      <SearchBar onTypeChange={onTypeChange} />
+      <PokedexTable pokemons={pokemons}/>
     </>
   )
 }
