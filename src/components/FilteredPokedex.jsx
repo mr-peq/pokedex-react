@@ -5,6 +5,7 @@ import SearchBar from './SearchBar';
 
 export default function FilteredPokedex() {
   const [pokemons, setPokemons] = useState([]);
+  const [typeButtons, setTypeButtons] = useState([]);
 
   const onTypeChange = (e) => {
     const button = e.currentTarget;
@@ -27,10 +28,25 @@ export default function FilteredPokedex() {
     })
     .then(response => response.json())
     .then((data) => {
-      console.log(data);
       setPokemons(data);
     })
   }
+
+  const getAllTypes = () => {
+    const url = "http://localhost:3000/types";
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then(types => setTypeButtons(types));
+  }
+
+  useEffect(() => {
+    getAllTypes();
+  }, []);
 
   useEffect(() => {
     changePokemons();
@@ -39,7 +55,10 @@ export default function FilteredPokedex() {
 
   return(
     <>
-      <SearchBar onTypeChange={onTypeChange} />
+      <SearchBar
+        onTypeChange={onTypeChange}
+        types={typeButtons}
+      />
       <PokedexTable pokemons={pokemons}/>
     </>
   )
