@@ -1,17 +1,50 @@
 import { useState, useEffect } from 'react'
+
 import PokedexTable from './PokedexTable'
 import TypeButton from './TypeButton';
+
 import '../SearchBar.css'
 
 export default function FilteredPokedex() {
   const [query, setQuery] = useState("grass");
   const [typeButtons, setTypeButtons] = useState([]);
+  const [queryTypes, setQueryTypes] = useState([]);
 
 
-  const changeQuery = (e) => {
-    const string = e.currentTarget.value;
-    // setQuery(string);
-    const url = `http://localhost:3000/pokemons?types=${string}`;
+  // const changeQuery = (e) => {
+  //   const string = e.currentTarget.value;
+  //   // setQuery(string);
+  //   const url = `http://localhost:3000/pokemons?types=${string}`;
+  //   fetch(url, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     }
+  //   })
+  //   .then(response => response.json())
+  //   .then((data) => {
+  //     console.log(data);
+  //   })
+  // }
+
+  const getTypes = () => {
+    const url = "http://localhost:3000/types";
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(response => response.json())
+    .then((types) => {
+      const buttons = types.map(type => TypeButton({'setQueryTypes': setQueryTypes, 'type': type.name}));
+      setTypeButtons(buttons);
+    });
+  }
+
+  const getPokemons = () => {
+    // makes the query to get the filtered pokemons
+    const url = `http://localhost:3000/pokemons?types=${queryTypes.join('+')}`;
     fetch(url, {
       method: "GET",
       headers: {
@@ -24,24 +57,11 @@ export default function FilteredPokedex() {
     })
   }
 
-  const getTypes = () => {
-    const url = "http://localhost:3000/types";
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(response => response.json())
-    .then((types) => {
-      const buttons = types.map(type => TypeButton(type.name));
-      setTypeButtons(buttons);
-    });
-  }
-
   useEffect(() => {
     getTypes();
   }, []);
+
+  getPokemons();
 
 
   return(
