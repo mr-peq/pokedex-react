@@ -22,16 +22,8 @@ export default function FilteredPokedex() {
   }
 
   const changePokemons = () => {
-    // Refacto in function
-    const selectedTypes = document.querySelectorAll('.custom-btn.selected');
-    const query = [];
-    selectedTypes.forEach(button => {
-      query.push(button.innerText);
-    });
-    // Refacto in function
-    let url = "http://localhost:3000/pokemons?";
-    url += include ? "types=" : "not_types=";
-    url += query.join('+');
+    const query = getSelectedTypes();
+    const url = buildUrl(query);
 
     fetch(url, {
       method: "GET",
@@ -43,6 +35,22 @@ export default function FilteredPokedex() {
     .then((data) => {
       setPokemons(data);
     })
+  }
+
+  const getSelectedTypes = () => {
+    const selectedTypes = document.querySelectorAll('.custom-btn.selected');
+    const query = [];
+    selectedTypes.forEach(button => {
+      query.push(button.innerText);
+    });
+    return query;
+  }
+
+  const buildUrl = (query) => {
+    let url = "http://localhost:3000/pokemons?";
+    url += include ? "types=" : "not_types=";
+    url += query.join('+');
+    return url
   }
 
   const getAllTypes = () => {
