@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import TypeButton from './TypeButton';
 
 import '../SearchBar.css'
+import '../Button.css'
 
 export default function SearchBar(props) {
 
@@ -17,6 +18,10 @@ export default function SearchBar(props) {
   return (
     <>
       <div className="types">{typeButtons}</div>
+      <div className="include-exclude">
+        <div className="include-btn selected">include</div>
+        <div className="exclude-btn">exclude</div>
+      </div>
     </>
   )
 }

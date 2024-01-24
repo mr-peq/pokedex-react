@@ -28,3 +28,21 @@
   opacity: 1;
   box-shadow: 0 0 0 3px white inset;
 }
+
+.include-exclude {
+  display: flex;
+}
+
+.include-btn, .exclude-btn {
+  background-color: rgb(178, 215, 207);
+  padding: 1em 3em;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.include-btn.selected,
+.exclude-btn.selected {
+  background-color: rgb(26, 203, 162);
+  box-shadow: none;
+}
