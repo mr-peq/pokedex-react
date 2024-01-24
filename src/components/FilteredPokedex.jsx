@@ -22,12 +22,17 @@ export default function FilteredPokedex() {
   }
 
   const changePokemons = () => {
+    // Refacto in function
     const selectedTypes = document.querySelectorAll('.custom-btn.selected');
     const query = [];
     selectedTypes.forEach(button => {
       query.push(button.innerText);
     });
-    const url = `http://localhost:3000/pokemons?types=${query.join('+')}`;
+    // Refacto in function
+    let url = "http://localhost:3000/pokemons?";
+    url += include ? "types=" : "not_types=";
+    url += query.join('+');
+
     fetch(url, {
       method: "GET",
       headers: {
