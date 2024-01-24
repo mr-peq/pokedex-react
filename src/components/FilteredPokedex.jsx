@@ -6,11 +6,19 @@ import SearchBar from './SearchBar';
 export default function FilteredPokedex() {
   const [pokemons, setPokemons] = useState([]);
   const [typeButtons, setTypeButtons] = useState([]);
+  const [include, setInclude] = useState(true);
 
   const onTypeChange = (e) => {
     const button = e.currentTarget;
     button.classList.toggle('selected');
     changePokemons();
+  }
+
+  const onIncludeChange = () => {
+    // Switch include/exclude by changing which button holds the class "selected"
+    const includeExcludeButtons = document.querySelectorAll('.include-exclude > div');
+    includeExcludeButtons.forEach(button => button.classList.toggle('selected'));
+    setInclude(!include);
   }
 
   const changePokemons = () => {
@@ -50,7 +58,7 @@ export default function FilteredPokedex() {
 
   useEffect(() => {
     changePokemons();
-  }, []);
+  }, [include]);
 
 
   return(
@@ -58,6 +66,7 @@ export default function FilteredPokedex() {
       <SearchBar
         onTypeChange={onTypeChange}
         types={typeButtons}
+        onIncludeChange={onIncludeChange}
       />
       <PokedexTable pokemons={pokemons}/>
     </>
