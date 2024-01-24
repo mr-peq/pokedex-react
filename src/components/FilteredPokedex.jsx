@@ -6,6 +6,7 @@ import SearchBar from './SearchBar';
 export default function FilteredPokedex() {
   const [pokemons, setPokemons] = useState([]);
   const [typeButtons, setTypeButtons] = useState([]);
+  const [include, setInclude] = useState(true);
 
   const onTypeChange = (e) => {
     const button = e.currentTarget;
@@ -13,13 +14,17 @@ export default function FilteredPokedex() {
     changePokemons();
   }
 
+  const onIncludeChange = () => {
+    // Switch include/exclude by changing which button holds the class "selected"
+    const includeExcludeButtons = document.querySelectorAll('.include-exclude > div');
+    includeExcludeButtons.forEach(button => button.classList.toggle('selected'));
+    setInclude(!include);
+  }
+
   const changePokemons = () => {
-    const selectedTypes = document.querySelectorAll('.custom-btn.selected');
-    const query = [];
-    selectedTypes.forEach(button => {
-      query.push(button.innerText);
-    });
-    const url = `http://localhost:3000/pokemons?types=${query.join('+')}`;
+    const query = getSelectedTypes();
+    const url = buildUrl(query);
+
     fetch(url, {
       method: "GET",
       headers: {
@@ -30,6 +35,22 @@ export default function FilteredPokedex() {
     .then((data) => {
       setPokemons(data);
     })
+  }
+
+  const getSelectedTypes = () => {
+    const selectedTypes = document.querySelectorAll('.custom-btn.selected');
+    const query = [];
+    selectedTypes.forEach(button => {
+      query.push(button.innerText);
+    });
+    return query;
+  }
+
+  const buildUrl = (query) => {
+    let url = "http://localhost:3000/pokemons?";
+    url += include ? "types=" : "not_types=";
+    url += query.join('+');
+    return url
   }
 
   const getAllTypes = () => {
@@ -50,7 +71,7 @@ export default function FilteredPokedex() {
 
   useEffect(() => {
     changePokemons();
-  }, []);
+  }, [include]);
 
 
   return(
@@ -58,6 +79,7 @@ export default function FilteredPokedex() {
       <SearchBar
         onTypeChange={onTypeChange}
         types={typeButtons}
+        onIncludeChange={onIncludeChange}
       />
       <PokedexTable pokemons={pokemons}/>
     </>
