@@ -1,6 +1,8 @@
 .custom-btn {
   opacity: 0.8;
   width: 100px;
+  margin-inline: 10px;
+  margin-block: 5px;
   transition: all ease .3s;
 }
 
@@ -22,6 +24,58 @@
 
 .water {
   background-color: #6890F0;
+}
+
+.bug {
+  background-color: #A8B820;
+}
+
+.normal {
+  background-color: #A8A878;
+}
+
+.dark {
+  background-color: #705848;
+}
+
+.electric {
+  background-color: #F8D030;
+}
+
+.psychic {
+  background-color: #F85888;
+}
+
+.ground {
+  background-color: #E0C068;
+}
+
+.ice {
+  background-color: #98D8D8;
+}
+
+.steel {
+  background-color: #B8B8D0;
+}
+
+.fairy {
+  background-color: #EE99AC;
+}
+
+.fighting {
+  background-color: #C03028;
+}
+
+.rock {
+  background-color: #B8A038;
+}
+
+.ghost {
+  background-color: #705898;
+}
+
+.dragon {
+  background-color: #7038F8;
 }
 
 .selected {
